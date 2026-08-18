@@ -1,0 +1,46 @@
+class Solution(object):
+    def minWindow(self, s, t):
+        
+
+        # Frequency of characters required from t
+        hash = {}
+
+        for ch in t:
+            hash[ch] = hash.get(ch, 0) + 1
+
+        l = 0
+        r = 0
+        count = 0
+        min_len = float("inf")
+        start = 0
+
+        while r < len(s):
+
+            if s[r] in hash:
+                hash[s[r]] -= 1
+
+                if hash[s[r]] >= 0:
+                    count += 1
+
+            # Window contains all characters of t
+            while count == len(t):
+
+                if r - l + 1 < min_len:
+                    min_len = r - l + 1
+                    start = l
+
+                if s[l] in hash:
+                    hash[s[l]] += 1
+
+                    if hash[s[l]] > 0:
+                        count -= 1
+
+                l += 1
+
+            r += 1
+
+        if min_len == float("inf"):
+            return ""
+
+        return s[start:start + min_len]
+        
